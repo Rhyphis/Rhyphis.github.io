@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>一年九班班歌_溯游天溟</title>
+<link href="css/base.css" rel="stylesheet" type="text/css">
+<link href="css/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="player_wrap">
+	<div class="player_box">
+		<div class="sound_control">
+			<img src="img/voice1.png" class="min cursor-pointer">
+			<div class="range-wrap">
+				<div class="range">
+					<input type="range" min="0" max="100" step="1" value="100" id="voiceRange">
+					<p class="rang_width" style="width: 100%;"></p>
+				</div>
+			</div>
+			<img src="img/voice2.png" class="max cursor-pointer">
+		</div>
+		<div class="album">
+			<img id="album" src="">
+		</div>
+		<div class="song_details">
+			<h3 id="songName">溯游天溟</h3>
+			<span class="singer" id="singer">Instrumentel</span>
+		</div>
+		<div class="time_control">
+			<div class="range-wrap">
+				<div class="range">
+					<input type="range" id="playRange" min="0" max="100" step="1" value="0">
+					<p class="rang_width" style="width:0%"></p>
+				</div>
+			</div>
+			<div class="time">
+				<span id="currentTime">00:00</span>
+				<span id="endTime">00:00</span>
+			</div>
+		</div>
+		<div class="play_btns">
+			<a href="javascript:;" class="prev" id="prev"></a>
+			<a href="javascript:;" class="playPause pause" id="playPause"></a>
+			<a href="javascript:;" class="next" id="next"></a>
+		</div>
+		<div class="singer">
+			<h3 align="middle">歌词</h3>
+			<h1 align="middle">一年九班班歌</h1>
+			<br>
+			<h2 align="middle">溯游天溟</h2>
+			<br>
+			<div align="middle">
+				<p>作曲：OBLEXX（富思源）、blidl（邹德林）</p>
+				<p>作词：诗言（朱镕岐）、OBLEXX（富思源）、王楚格</p>
+			</div>
+			<br>
+			<div align="middle">
+				<p>伴清波 荡漾<br>望云海 浩荡<br>思绪中 向往<br>苍穹中 见海洋</p>
+				<br><br>
+				<p>云海翻起滚滚涛<br>狂风卷起叠叠浪<br>云流风涌间遨游<br>心之所向是远方<br>北溟本为安适所<br>心海却向破风浪<br>畏高空惧长涛<br>欲背浮华却夷由</p>
+				<br><br>
+				<p>波澜连天向天横，白浪滔天尽日风<br>战恐惧 断踌躇，一跃破海入苍穹<br>纵然跌落千百尺，仍续攀登万丈空<br>腾空展翅振风歌，向天游</p>
+				<br><br>
+				<p>羽翼垂天似边云，碧天空旷尽乘兴<br>云海隐 鹏悠鸣，曜穿层渊缀云晴<br>乘风破浪终有时，九天遨游览宏图<br>观天溟 溯风浪，亮翼(而)飞翔</p>
+			</div>
+			<br><br>
+		</div>
+		<div class="list_control" id="listControler">
+<!--			<a href="javascript:;" class="suiji" title="随机播放"></a>
+			<a href="javascript:;" class="shunxu" title="顺序播放"></a>
+			<a href="javascript:;" class="xunhuan on" title="循环播放"></a> -->
+		</div>
+		<div class="player_bg" id="songImg"></div>
+	</div>
+</div>
+<audio id="audio"></audio>
+
+
+<script>
+//音乐参数
+var songs = [
+	{
+		songSrc : './data/swimtosky.mp3',
+		songAlbum : './data/溯游天溟封面.jpg',
+		songImg : './data/溯游天溟封面.jpg',
+		songName : '溯游天溟',
+		singer : 'Instrumentel'
+	},
+/*	{
+		songSrc : './data/swimtosky.mp3',
+		songAlbum : './data/溯游天溟封面.jpg',
+		songImg : './data/溯游天溟封面.jpg',
+		songName : '溯游天溟',
+		singer : 'Instrumentel'
+	},*/
+];
+
+//定义相关控件
+var audioObj = document.querySelector('#audio');
+var album = document.querySelector('#album');
+var songName = document.querySelector('#songName');
+var singer = document.querySelector('#singer');
+var songTime = document.querySelector('#songTime');
+var prev = document.querySelector('#prev');
+var playPause = document.querySelector('#playPause');
+var next = document.querySelector('#next');
+var listControler = document.querySelector('#listControler');
+var songImg = document.querySelector('#songImg');
+var currentTime = document.querySelector('#currentTime');
+var endTime = document.querySelector('#endTime');
+var playRange = document.querySelector('#playRange');
+var voiceRange = document.querySelector('#voiceRange');
+var curTime=0;
+var maxTime=0;
+var timer = null;
+var idx = 0;
+var loop = true;  //是否循环播放
+
+window.onload = function(){
+	//初始化播放器
+	initPlayer(idx);
+}
+
+function initPlayer(idx){
+	//初始化参数
+	currentTime.innerText = '00:00';
+	playRange.value = 0;
+	playRange.nextElementSibling.style.width = '0%';
+	playPause.style.backgroundImage = 'url(./img/play.png)';
+	playPause.classList.remove('palse');
+	playPause.classList.add('play');
+	curTime=0;
+	clearInterval(timer);
+	
+	//设置界面参数
+	audioObj.src = songs[idx].songSrc;
+	album.src = songs[idx].songAlbum;
+	songName.innerText = songs[idx].songName;
+	singer.innerText = songs[idx].singer;
+	songImg.style.backgroundImage = 'url(' + songs[idx].songImg + ')';
+
+	//播放
+	audioObj.play();
+	
+	//设置总时长和总进度条 onloadedmetadata 当指定的音频/视频的元数据已加载时 包括：时长、尺寸（仅视频）以及文本轨道。
+	audioObj.onloadedmetadata = function(){
+		var minutes = parseInt(this.duration/60);
+		var seconds = parseInt(this.duration%60);
+		maxTime = parseInt(this.duration);  //最大时间
+		endTime.innerText = formatNum(minutes) + ':' + formatNum(seconds);
+		playRange.setAttribute('max',parseInt(maxTime));
+	}
+	
+	//设置当前播放时间和进度条位置
+	audioObj.onplaying = function(){
+		timer = setInterval(function(){
+			curTime++; //当前时间累加
+			setCurTime(curTime);
+		},1000)
+	}
+	
+	//上一曲
+	prev.onclick = function(){
+		idx--;
+		if(idx<0){
+			idx = songs.length-1;
+		}
+		initPlayer(idx);
+	}
+	
+	//暂停播放
+	playPause.onclick = function(){
+		if(this.classList.contains('pause')){
+			audioObj.pause();
+			this.style.backgroundImage = 'url(./img/play.png)';
+			this.classList.remove('pause');
+			this.classList.add('play');
+			clearInterval(timer);
+		}else{
+			audioObj.play();
+			this.style.backgroundImage = 'url(./img/pause.png)';
+			this.classList.remove('play');
+			this.classList.add('pause');
+		}
+	}
+	
+	//下一曲
+	next.onclick = function(){
+		idx++;
+		if(idx>songs.length-1){
+			idx = 0;
+		}
+		initPlayer(idx);
+	}
+	
+	//播放结束逻辑
+	audioObj.onended = function(){
+		idx++;
+		if(idx>songs.length-1){
+			if(loop){
+				idx = 0;
+				initPlayer(idx);
+			}
+		}else{
+			initPlayer(idx);
+		}
+	}
+	
+	//列表循环方式：
+	var listBtns = listControler.getElementsByTagName('a');
+	for(var i=0; i<listBtns.length; i++){
+		listBtns[i].onclick = function(){
+			for(var j=0; j<listBtns.length; j++){
+				listBtns[j].classList.remove('on');
+			}
+			this.classList.add('on');
+			if(this.classList.contains('suiji')){
+				//随机
+				songs.shuffle();
+			}else if(this.classList.contains('shunxu')){
+				//顺序
+				loop = false;
+			}else{
+				//循环
+				loop = true;
+			}
+		}
+	}
+	
+}
+
+//设置当前播放时间
+function setCurTime(curTime){
+	var curMinutes = parseInt(curTime/60);
+	var curSeconds = parseInt(curTime%60);
+	currentTime.innerText = formatNum(curMinutes) + ':' + formatNum(curSeconds);
+	//js动态改变input值无法监听，故采用比较的方法
+	var oldTime = playRange.value;
+	if(oldTime != curTime){
+		playRange.value = curTime;
+		var maxValue = playRange.max;
+		var width = (curTime/maxValue)*100 +"%";
+		playRange.nextElementSibling.style.width = width;
+	}
+}
+
+//声音滑块和播放进度条
+var allRanges = document.querySelectorAll('input[type="range"]');
+for(var i=0; i<allRanges.length; i++){
+	//拖动
+	allRanges[i].addEventListener("input", function(){
+		var newValue = this.value;
+		var maxValue = this.max;
+		var width = (newValue/maxValue)*100 +"%";
+		this.nextElementSibling.style.width = width;
+		if(this.id == 'playRange'){
+			//设置播放时间
+			audioObj.currentTime = newValue;
+			curTime = audioObj.currentTime;
+			clearInterval(timer);
+		}else{
+			//设置音量
+			audioObj.volume = newValue/100;
+		}
+	});
+}
+//滚动鼠标滚轮
+var allRangeWrap = document.querySelectorAll('.range-wrap');
+for(var i=0; i<allRangeWrap.length; i++){
+	allRangeWrap[i].addEventListener('mousewheel',function(e){
+		var e = event || window.event;
+		var thisRange = this.children[0].children[0];
+		var newValue = parseInt(thisRange.value);
+		//滚轮前滚
+        if (e.wheelDelta > 0) {
+            newValue = newValue+1;
+        }
+		//滚轮后滚
+        if (e.wheelDelta < 0) {
+            newValue = newValue-1;
+        }
+		var maxValue = thisRange.max;
+        var width = (newValue/maxValue)*100 +"%";
+        thisRange.value = newValue;
+        this.children[0].children[1].style.width = width;
+		if(thisRange.id == 'playRange'){
+			//设置播放时间
+			audioObj.currentTime = newValue;
+			curTime = audioObj.currentTime;
+			clearInterval(timer);
+		}else{
+			//设置音量
+			audioObj.volume = newValue/100;
+		}
+	})
+}
+
+//一位数转两位数
+function formatNum(n){
+	if(n<10){
+		return '0'+n;
+	}else{
+		return n;
+	}
+}
+
+//随机数组 
+Array.prototype.shuffle = function(){
+	var input = this;
+	for(var i=input.length-1; i>=0; i--){
+		var randomIndex = Math.floor(Math.random()*(i+1));
+		var itemAtIndex = input[randomIndex];
+		input[randomIndex] = input[i];
+		input[i] = itemAtIndex;
+	}
+	return input;
+}
+</script>
+</body>
+</html>

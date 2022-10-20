@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+.player_wrap{position: absolute; width: 100%; height: 150%; left: 0; top:0; background: linear-gradient(#1b2e3d,#376177,#172f42);}
+.player_box{width:450px; height: 1300px; position: absolute; top:30%; left: 50%; margin-top:-350px; margin-left:-225px; overflow: hidden; box-shadow: 2px 2px 10px 0 rgba(0,0,0,.3);}
+/*.player_box .player_bg{position: absolute; top:-10%; left:-10%; background: url(../data/Flight_Of_The_Silverbird_img.jpg) no-repeat center; background-size: 100% 100%; width:120%; height: 120%; filter: blur(20px); z-index: 1;}
+*/
+.sound_control{display: flex; justify-content: space-between; position: relative; z-index: 2; align-items: center; padding: 30px;}
+.sound_control img{flex-shrink: 0;}
+.sound_control .range-wrap{display: flex; flex-grow: 1; margin: 0 15px; position: relative; top:-7px}
+.sound_control .range-wrap input[type="range"]{display: block; -webkit-appearance: none; background-color:#bdc3c7; width: 100%; height:5px; border-radius:3px; margin: 0 auto; outline: 0;}
+.sound_control .range-wrap input[type="range"]::-webkit-slider-thumb {-webkit-appearance: none; background-color: #fff; width: 15px; height:15px; border-radius: 50%; cursor: url(../img/cur/link.cur),auto; transition: 0.3s ease-in-out; position: relative; z-index: 1;}
+.sound_control .range-wrap .range{flex-grow:1; position: relative; top:7px}
+.sound_control .range-wrap .rang_width{position:absolute; top:0px; left:0; width: 50%; background:#62c6c7; height:5px; border-radius:5px 0 0 5px;}
+
+.album{width:318px; height: 318px; margin: auto; position: relative; z-index: 2; background: rgba(255,255,255,.05); box-shadow: 1px 1px 0 0 rgba(255,255,255,.1) inset, 2px 2px 4px 0 rgba(0,0,0,.3);}
+.album:after{position:absolute; left: 30px; top:30px; right:30px; bottom:30px; background: rgba(255,255,255,.05); box-shadow: 1px 1px 0 0 rgba(255,255,255,.1) inset, 2px 2px 4px 0 rgba(0,0,0,.3); content: '';}
+.album img{position: relative; width: 169px; height: 169px; display: block; margin: auto; z-index: 2; top:74px;}
+
+.song_details{position: relative; z-index: 2; text-align: center; color: #fff; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; padding:10px 20px;}
+.song_details h3{font-weight: normal; padding:5px; font-size: 20px;}
+.song_details span{display: block; font-size: 14px;}
+
+.time_control{position: relative; z-index: 2; padding:10px 30px;}
+.time_control .range-wrap{display: flex; flex-grow: 1; margin: 0 15px; position: relative; top:-7px}
+.time_control .range-wrap input[type="range"]{display: block; -webkit-appearance: none; background-color:#bdc3c7; width: 100%; height:5px; border-radius:3px; margin: 0 auto; outline: 0;}
+.time_control .range-wrap input[type="range"]::-webkit-slider-thumb {-webkit-appearance: none; background-color: #fff; width: 15px; height:15px; border-radius: 50%; cursor: url(../img/cur/link.cur),auto; transition: 0.3s ease-in-out; position: relative; z-index: 1;}
+.time_control .range-wrap .range{flex-grow:1; position: relative; top:7px}
+.time_control .range-wrap .rang_width{position:absolute; top:0px; left:0; width: 50%; background:#62c6c7; height:5px; border-radius:5px 0 0 5px;}
+.time_control .time{padding:10px 15px; display: flex; justify-content: space-between; color: #fff; font-family: arial;}
+
+.play_btns{position: relative; z-index: 2; display: flex; padding:10px 120px; align-items: center; justify-content: space-around;}
+.play_btns a{width:50px; height:43px; background: url(../img/prev.png) no-repeat; flex-shrink: 0; opacity: .8;}
+.play_btns .next{background-image: url(../img/next.png);}
+.play_btns .playPause{width:70px; height:65px;}
+.play_btns .playPause.play{background-image: url(../img/play.png);}
+.play_btns .playPause.pause{background-image: url(../img/pause.png);}
+.play_btns a:hover{opacity: 1;}
+.play_btns a:active{opacity: .5;}
+
+.list_control{display: flex; justify-content: space-between; position: relative; z-index: 2; padding:20px 80px 0;}
+.list_control a{width: 32px; height: 25px; background: url(../img/shunxu_off.png) no-repeat center; transform: scale(.8);}
+.list_control .suiji{background-image: url(../img/suiji_off.png);}
+.list_control .suiji.on{background-image: url(../img/suiji_on.png);}
+.list_control .shunxu{background-image: url(../img/shunxu_off.png);}
+.list_control .shunxu.on{background-image: url(../img/shunxu_on.png);}
+.list_control .xunhuan{background-image: url(../img/xunhuan_off.png);}
+.list_control .xunhuan.on{background-image: url(../img/xunhuan_on.png);}
